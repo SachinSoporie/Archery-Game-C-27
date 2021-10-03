@@ -4,7 +4,7 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var canvas,baseimage,playerimage;
+var canvas, baseimage, playerimage;
 var palyer, playerBase, playerArcher;
 var playerArrows = [];
 var board1, board2;
@@ -31,7 +31,7 @@ function setup() {
   World.add(world, playerBase);
 
   player = Bodies.rectangle(250, playerBase.position.y - 160, 50, 180, options);
-  World.add(world,player)
+  World.add(world, player)
 
   playerArcher = new PlayerArcher(
     340,
@@ -45,9 +45,9 @@ function setup() {
 }
 
 function draw() {
-  background(backgroundImg );
-  image(baseimage,playerBase.position.x,playerBase.position.y,180,150)
-  image(playerimage,player.position.x,player.position.y,50,180)
+  background(backgroundImg);
+  image(baseimage, playerBase.position.x, playerBase.position.y, 180, 150)
+  image(playerimage, player.position.x, player.position.y, 50, 180)
 
   Engine.update(engine);
   playerArcher.display();
@@ -58,34 +58,37 @@ function draw() {
   for (var i = 0; i < playerArrows.length; i++) {
     if (playerArrows[i] !== undefined) {
       playerArrows[i].display();
-      
+
+      d1 = dist(playerArrows[i].body.position.x, playerArrows[i].body.position.y, board1.body.position.x, board1.body.position.y);
+      if (d1 <= 100) {
+        console.log("collision");
+      }
       var board1Collision = Matter.SAT.collides(
         board1.body,
-        player.body,
         playerArrows[i].body
       );
 
-        var board2Collision = Matter.SDAT.collides(
-          board2.body,
-          playerArrows[i].body
-        );
+      var board2Collision = Matter.SAT.collides(
+        board2.body,
+        playerArrows[i].body
+      );
 
-        if (board1Collision.collided || board2Collision.collided){
-          console.log("Collided");
-        }
-      
+      if (board1Collision.collided || board2Collision.collided) {
+        console.log("Collided");
+      }
+
       //[optional code to add trajectory of arrow]
-      
+
       var posX = playerArrows[i].body.position.x;
       var posY = playerArrows[i].body.position.y;
 
       if (posX > width || posY > height) {
-       if (!playerArrows[i].isRemoved) {
-           playerArrows[i].remove(i);
-         } else {
-           playerArrows[i].trajectory = [];
-         }
-       }
+        if (!playerArrows[i].isRemoved) {
+          playerArrows[i].remove(i);
+        } else {
+          playerArrows[i].trajectory = [];
+        }
+      }
     }
   }
 
@@ -99,7 +102,7 @@ function draw() {
 
 function keyPressed() {
   if (keyCode === 32) {
-   if(keyCode === 32) {
+    if (keyCode === 32) {
       var posX = playerArcher.body.position.x;
       var posY = playerArcher.body.position.y;
       var angle = playerArcher.body.angle;
@@ -122,5 +125,3 @@ function keyReleased() {
     }
   }
 }
-
-
